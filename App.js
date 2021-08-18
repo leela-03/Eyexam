@@ -1,21 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from "react";
+import { createSwitchNavigator, createAppContainer } from "react-navigation";
+import DashboardScreen from "./screens/Dashboard";
+import LoginScreen from "./screens/Login";
+import LoadingScreen from "./screens/Loading";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import * as firebase from "firebase";
+import { firebaseConfig } from "./config";
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app();
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const AppSwitchNavigator = createSwitchNavigator({
+  LoadingScreen: LoadingScreen,
+  LoginScreen: LoginScreen,
+  DashboardScreen: DashboardScreen
 });
+
+const AppNavigator = createAppContainer(AppSwitchNavigator);
+
+export default function App() {
+  return <AppNavigator />;
+}
